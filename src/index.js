@@ -45,6 +45,13 @@ class Select {
     return this;
   }
 
+  use(...a) {
+    this.addTransform(a, (prevOutput, cb, args) =>
+      cb.apply(null, [prevOutput, ...args]));
+
+    return this;
+  }
+
   create() {
     const { transforms, selectors } = this;
 

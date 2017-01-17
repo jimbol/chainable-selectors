@@ -28,4 +28,53 @@ const hiNames = select(ids)
 
 ### Supported Methods
 #### Map
+Loop through previous output.
+```es6
+select(<selector>).
+  .map(
+    ...<dependent selectors>,
+    <callback: ( <item at index>, ...<dependent selector output> )>
+  )
+```
+
+Example:
+```es6
+.map(hash, (id, h) => h[id])
+```
+
 #### Reduce
+Reduce previous output.
+```es6
+select(<selector>).
+  .reduce(
+    ...<dependent selectors>,
+    <callback: ( <prev reduced value> = initial, <item at index>, ...<dependent selector output> )>
+  )
+```
+
+Example:
+```es6
+.reduce((prev = [], item) => {
+  return [...prev, item.id];
+})
+```
+
+#### Use
+Use custom function on previous output.
+```es6
+select(<selector>).
+  .use(
+    ...<dependent selectors>,
+    <callback: ( <prev transform output>, ...<dependent selector output> )>
+  )
+```
+
+Example:
+```es6
+.use(getSelectedId, (prevOutput, selectedId) =>
+  R.equals(selectedId)(prevOutput.id)
+)
+```
+```es6
+.use(getSelectedId, hasSelectedId)
+```

@@ -78,4 +78,27 @@ describe('select', () => {
       'Hi ' + STATE.hash['5'].name,
     ]);
   });
+
+  it('allows custom functions', () => {
+    const prev = [
+      'Hi ' + STATE.hash['2'].name,
+      'Hi ' + STATE.hash['5'].name,
+    ];
+
+    const sel = select(ids)
+      .map(hash, (id, h) => h[id])
+      .reduce((prev = [], item) => {
+        prev.push(item.name);
+        return prev;
+      })
+      .map((name) => `Hi ${name}`)
+      .use(hash, (prev, h) => {
+        const keys = Object.keys(h).join(' ');
+        return `${keys} ${prev.join(' ')}`
+      })
+      .create();
+
+    expect(sel(STATE))
+      .to.deep.equal(`${Object.keys(STATE.hash).join(' ')} ${prev.join(' ')}`);
+  });
 });
